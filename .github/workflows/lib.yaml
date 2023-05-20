@@ -1,9 +1,10 @@
-name: Test and build backend
+name: Test and build go-lib
 
 on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
   test-lib:
