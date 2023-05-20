@@ -6,6 +6,11 @@ import (
 	"strconv"
 )
 
+func init() {
+	// Log as JSON instead of the default ASCII formatter.
+	log.SetFormatter(&log.JSONFormatter{})
+}
+
 func LookupEnv(key string, defaultValues ...string) string {
 	if val, ok := os.LookupEnv(key); ok {
 		return val
