@@ -16,6 +16,11 @@ var (
 	DB *sql.DB
 )
 
+func init() {
+	// Log as JSON instead of the default ASCII formatter.
+	log.SetFormatter(&log.JSONFormatter{})
+}
+
 func InitDb(dbDriver string, dbPath string, dbScripts string) error {
 	// Open the connection
 	var err error
