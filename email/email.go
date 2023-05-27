@@ -18,11 +18,11 @@ func init() {
 }
 
 type SendEmailRequest struct {
-	sendgridRequest SendgridRequest
-	url             string
-	emailFromName   string
-	emailFrom       string
-	emailToken      string
+	SendgridRequest SendgridRequest
+	Url             string
+	EmailFromName   string
+	EmailFrom       string
+	EmailToken      string
 }
 
 type SendgridRequest struct {
@@ -39,28 +39,28 @@ func SendEmail(sendEmailRequest SendEmailRequest) error {
 
 	var jsonData []byte
 	var err error
-	if strings.Contains(sendEmailRequest.url, "sendgrid") {
+	if strings.Contains(sendEmailRequest.Url, "sendgrid") {
 		sendGridReq := mail.NewSingleEmail(
-			mail.NewEmail(sendEmailRequest.emailFromName, sendEmailRequest.emailFrom),
-			sendEmailRequest.sendgridRequest.Subject,
-			mail.NewEmail("", sendEmailRequest.sendgridRequest.MailTo),
-			sendEmailRequest.sendgridRequest.TextMessage,
-			sendEmailRequest.sendgridRequest.HtmlMessage)
+			mail.NewEmail(sendEmailRequest.EmailFromName, sendEmailRequest.EmailFrom),
+			sendEmailRequest.SendgridRequest.Subject,
+			mail.NewEmail("", sendEmailRequest.SendgridRequest.MailTo),
+			sendEmailRequest.SendgridRequest.TextMessage,
+			sendEmailRequest.SendgridRequest.HtmlMessage)
 		jsonData, err = json.Marshal(sendGridReq)
 	} else {
-		jsonData, err = json.Marshal(sendEmailRequest.sendgridRequest)
+		jsonData, err = json.Marshal(sendEmailRequest.SendgridRequest)
 	}
 
 	if err != nil {
 		return err
 	}
 
-	req, err := http.NewRequest("POST", sendEmailRequest.url, bytes.NewBuffer(jsonData))
+	req, err := http.NewRequest("POST", sendEmailRequest.Url, bytes.NewBuffer(jsonData))
 	if err != nil {
 		return err
 	}
 
-	req.Header.Add("Authorization", "Bearer "+sendEmailRequest.emailToken)
+	req.Header.Add("Authorization", "Bearer "+sendEmailRequest.EmailToken)
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := c.Do(req)
 	if err != nil {
@@ -74,8 +74,13 @@ func SendEmail(sendEmailRequest SendEmailRequest) error {
 	return nil
 }
 
-func PrepareEmail(mailTo string, data map[string]interface{}, templateKey string, defaultSubject string,
-	defaultText string, lang string) SendgridRequest {
+func PrepareEmail(
+	mailTo string,
+	data map[string]string,
+	templateKey string,
+	defaultSubject string,
+	defaultText string,
+	lang string) SendgridRequest {
 	textMessage := parseTemplate("plain/"+lang+"/"+templateKey+".txt", data)
 	if textMessage == "" {
 		textMessage = defaultText
@@ -94,7 +99,7 @@ func PrepareEmail(mailTo string, data map[string]interface{}, templateKey string
 	}
 }
 
-func parseTemplate(filename string, other map[string]interface{}) string {
+func parseTemplate(filename string, other map[string]string) string {
 	textMessage := ""
 	tmplPlain, err := template.ParseFiles("mail-templates/" + filename)
 	if err == nil {
