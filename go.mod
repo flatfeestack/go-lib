@@ -1,6 +1,6 @@
 module github.com/flatfeestack/go-lib
 
-go 1.20
+go 1.23
 
 require (
 	github.com/go-jose/go-jose/v3 v3.0.0
@@ -8,7 +8,7 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/prometheus/client_golang v1.15.1
 	github.com/sendgrid/sendgrid-go v3.12.0+incompatible
-	github.com/sirupsen/logrus v1.9.3
+	github.com/sirupsen/logrus v1.10.2
 )
 
 require (
@@ -20,6 +20,6 @@ require (
 	github.com/prometheus/common v0.42.0 // indirect
 	github.com/prometheus/procfs v0.9.0 // indirect
 	golang.org/x/crypto v0.1.0 // indirect
-	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 )
